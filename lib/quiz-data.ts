@@ -15,7 +15,7 @@ export const sampleQuizData: QuizItem[] = [
     answer: "한국 국채 금리 상승으로 기업 자금조달 비용 증가",
     explanation:
       "대량의 정부채권 발행은 채권 공급 증가로 이어져 국채 금리 상승 압력을 만들고, 이는 기업들의 자금조달 비용 증가로 직결됩니다.",
-    newsLink: "https://www.sedaily.com/NewsView/government-bond-surge-2024",
+    newsLink: "https://www.sedaily.com/NewsView/2GY0HXFLP9",
   },
   {
     id: 2,
@@ -31,7 +31,7 @@ export const sampleQuizData: QuizItem[] = [
     answer: "대량 공급 → 장기 채권금리 상승 압력 증가",
     explanation:
       "132조원 규모의 대량 채권 발행은 채권시장에 공급 과잉을 야기하여 장기 채권금리 상승 압력을 직접적으로 증가시킵니다.",
-    newsLink: "https://www.yonhapnews.co.kr/economy/2024/bond-issuance-plan",
+    newsLink: "https://www.sedaily.com/NewsView/2GY0IG6RYE",
   },
   {
     id: 3,
@@ -46,7 +46,7 @@ export const sampleQuizData: QuizItem[] = [
     answer: "한국 증시 패시브 자금 유입 규모 축소",
     explanation:
       "MSCI 지수 편입 종목이 감소하면 해당 지수를 추종하는 패시브 펀드들의 한국 증시 투자 비중이 줄어들어 자금 유입 규모가 축소됩니다.",
-    newsLink: "https://www.mk.co.kr/news/stock/2024-msci-rebalancing",
+    newsLink: "https://www.sedaily.com/NewsView/2GY00KXAMA",
   },
   {
     id: 4,
@@ -62,7 +62,7 @@ export const sampleQuizData: QuizItem[] = [
     answer: "기업 실적 개선이 주가 상승을 뒷받침 → 추가 상승 동력 확보",
     explanation:
       "지수 최고치 경신에도 밸류에이션 지표가 낮다는 것은 기업 실적 개선이 주가 상승을 뒷받침하고 있음을 의미하여 추가 상승 동력을 제공합니다.",
-    newsLink: "https://www.hani.co.kr/arti/economy/stock/kospi-valuation-2024",
+    newsLink: "https://www.sedaily.com/NewsView/2GXZ4ADMSF",
   },
   {
     id: 5,
@@ -77,7 +77,7 @@ export const sampleQuizData: QuizItem[] = [
     answer: "글로벌 채권 수익률 하락 압력",
     explanation:
       "연준의 기준금리 인하는 미국 채권 수익률 하락을 직접적으로 유발하며, 이는 글로벌 채권시장 전반의 수익률 하락 압력으로 확산됩니다.",
-    newsLink: "https://www.labortoday.co.kr/news/fed-rate-cut-2024",
+    newsLink: "https://www.sedaily.com/NewsView/2GXYNP1UI7",
   },
 ]
 
