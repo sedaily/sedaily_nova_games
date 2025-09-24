@@ -1,0 +1,662 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Enhanced design tokens matching the comprehensive specification */
+  --background: #0b0f1a;
+  --foreground: #e6ecff;
+  --card: #101728;
+  --card-foreground: #e6ecff;
+  --popover: #121c31;
+  --popover-foreground: #e6ecff;
+  --primary: #5b7cff;
+  --primary-foreground: #e6ecff;
+  --secondary: #121c31;
+  --secondary-foreground: #a9b4d0;
+  --muted: #121c31;
+  --muted-foreground: #a9b4d0;
+  --accent: #9b8cff;
+  --accent-foreground: #e6ecff;
+  --destructive: #ef4444;
+  --destructive-foreground: #e6ecff;
+  --success: #22c55e;
+  --success-foreground: #e6ecff;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: #121c31;
+  --ring: #5b7cff;
+  --chart-1: #5b7cff;
+  --chart-2: #9b8cff;
+  --chart-3: #22c55e;
+  --chart-4: #ef4444;
+  --chart-5: #3c55c9;
+  --radius: 1.25rem;
+  --sidebar: #101728;
+  --sidebar-foreground: #e6ecff;
+  --sidebar-primary: #5b7cff;
+  --sidebar-primary-foreground: #e6ecff;
+  --sidebar-accent: #121c31;
+  --sidebar-accent-foreground: #a9b4d0;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #5b7cff;
+  --font-inter: "Inter", sans-serif;
+  --font-fira-code: "Fira Code", monospace;
+}
+
+.dark {
+  --background: #0b0f1a;
+  --foreground: #e6ecff;
+  --card: #101728;
+  --card-foreground: #e6ecff;
+  --popover: #121c31;
+  --popover-foreground: #e6ecff;
+  --primary: #5b7cff;
+  --primary-foreground: #e6ecff;
+  --secondary: #121c31;
+  --secondary-foreground: #a9b4d0;
+  --muted: #121c31;
+  --muted-foreground: #a9b4d0;
+  --accent: #9b8cff;
+  --accent-foreground: #e6ecff;
+  --destructive: #ef4444;
+  --destructive-foreground: #e6ecff;
+  --success: #22c55e;
+  --success-foreground: #e6ecff;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: #121c31;
+  --ring: #5b7cff;
+  --chart-1: #5b7cff;
+  --chart-2: #9b8cff;
+  --chart-3: #22c55e;
+  --chart-4: #ef4444;
+  --chart-5: #3c55c9;
+  --sidebar: #101728;
+  --sidebar-foreground: #e6ecff;
+  --sidebar-primary: #5b7cff;
+  --sidebar-primary-foreground: #e6ecff;
+  --sidebar-accent: #121c31;
+  --sidebar-accent-foreground: #a9b4d0;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #5b7cff;
+}
+
+@theme inline {
+  /* 부드러운 Inter와 Fira Code 폰트 변수로 업데이트 */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-fira-code);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    /* 폰트 렌더링 최적화 추가 */
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Enhanced background with smoother gradient transitions and AI-inspired grid pattern */
+    background-image: linear-gradient(rgba(91, 124, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91, 124, 255, 0.02) 1px, transparent 1px),
+      radial-gradient(circle at 20% 30%, rgba(91, 124, 255, 0.06) 0%, transparent 60%),
+      radial-gradient(circle at 80% 70%, rgba(155, 140, 255, 0.06) 0%, transparent 60%),
+      linear-gradient(180deg, rgba(11, 15, 26, 1) 0%, rgba(16, 23, 40, 0.95) 50%, rgba(11, 15, 26, 1) 100%);
+    background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%, 100% 200vh;
+    background-attachment: fixed, fixed, fixed, fixed, scroll;
+  }
+}
+
+/* Inter 폰트에 맞는 타이포그래피 스타일 업데이트 */
+.futuristic-heading {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.02em; /* Inter에 맞게 조정 */
+  line-height: 1.25;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+}
+
+.tech-mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.02em; /* Fira Code에 맞게 조정 */
+  font-feature-settings: "kern" 1, "liga" 1, "zero" 1, "ss01" 1; /* Fira Code 스타일리스틱 세트 활성화 */
+}
+
+/* Enhanced Korean typography with Pretendard font family */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+.korean-text {
+  /* 한글과 미래지향적 폰트 조합 최적화 */
+  font-family: "Pretendard", var(--font-sans), "Inter", "Noto Sans KR", sans-serif;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.korean-heading {
+  font-family: "Pretendard", var(--font-sans), "Inter", "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.015em; /* Inter에 맞게 조정 */
+  line-height: 1.3;
+}
+
+/* Advanced motion system with reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Override specific animations for reduced motion */
+  .glitch-text::before,
+  .glitch-text::after {
+    display: none !important;
+  }
+
+  .glitch-hover:hover::before,
+  .glitch-hover:hover::after {
+    display: none !important;
+  }
+
+  .gradient-text-neon {
+    animation: none !important;
+    background: linear-gradient(45deg, #5b7cff 0%, #9b8cff 50%, #22c55e 100%);
+    background-size: 100% 100%;
+  }
+
+  .particle-container::before {
+    animation: none !important;
+  }
+
+  /* Simplify glow effects for reduced motion */
+  .neon-glow-primary,
+  .neon-glow-accent,
+  .neon-glow-success,
+  .glow-primary,
+  .glow-success,
+  .glow-danger {
+    box-shadow: 0 0 5px rgba(91, 124, 255, 0.2) !important;
+  }
+}
+
+/* Performance optimizations for mobile devices */
+@media (max-width: 768px) {
+  .particle-container::before {
+    display: none;
+  }
+
+  .glassmorphism,
+  .glassmorphism-card {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .card-enhanced {
+    backdrop-filter: blur(15px);
+  }
+
+  /* Reduce particle effects on mobile */
+  .section-gradient-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(11, 15, 26, 0.05) 0%,
+      transparent 15%,
+      transparent 85%,
+      rgba(11, 15, 26, 0.05) 100%
+    );
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glassmorphism,
+  .glassmorphism-card {
+    background: rgba(16, 23, 40, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .card-enhanced {
+    background: rgba(16, 23, 40, 0.98);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .gradient-text-neon {
+    background: #5b7cff;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Focus management for keyboard navigation */
+.focus-visible\:ring-enhanced:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--background), 0 0 0 6px var(--primary), 0 0 30px rgba(91, 124, 255, 0.4);
+  z-index: 10;
+}
+
+/* Skip to content link for screen readers */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 100;
+  transition: top 0.3s;
+}
+
+.skip-to-content:focus {
+  top: 6px;
+}
+
+/* Subtle glow effects for interactive elements */
+.glow-primary {
+  box-shadow: 0 0 0 1px rgba(91, 124, 255, 0.2), 0 0 20px rgba(91, 124, 255, 0.1), 0 0 40px rgba(91, 124, 255, 0.05);
+}
+
+.glow-success {
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.2), 0 0 20px rgba(34, 197, 94, 0.1), 0 0 40px rgba(34, 197, 94, 0.05);
+}
+
+.glow-danger {
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2), 0 0 20px rgba(239, 68, 68, 0.1), 0 0 40px rgba(239, 68, 68, 0.05);
+}
+
+/* Enhanced card styles with backdrop blur */
+.card-enhanced {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 23, 40, 0.98) 0%,
+    rgba(18, 28, 49, 0.95) 50%,
+    rgba(16, 23, 40, 0.98) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.card-enhanced::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(91, 124, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(155, 140, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.03) 75%,
+    rgba(91, 124, 255, 0.15) 100%
+  );
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+}
+
+/* Smooth section transitions with gradient overlays */
+.section-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 15, 26, 0.1) 0%,
+    transparent 15%,
+    transparent 85%,
+    rgba(11, 15, 26, 0.1) 100%
+  );
+  pointer-events: none;
+}
+
+.section-border-gradient {
+  position: relative;
+}
+
+.section-border-gradient::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(91, 124, 255, 0.1) 10%,
+    rgba(155, 140, 255, 0.15) 30%,
+    rgba(91, 124, 255, 0.2) 50%,
+    rgba(155, 140, 255, 0.15) 70%,
+    rgba(91, 124, 255, 0.1) 90%,
+    transparent 100%
+  );
+  filter: blur(1px);
+}
+
+.section-border-gradient::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(91, 124, 255, 0.08) 20%,
+    rgba(155, 140, 255, 0.12) 40%,
+    rgba(91, 124, 255, 0.15) 50%,
+    rgba(155, 140, 255, 0.12) 60%,
+    rgba(91, 124, 255, 0.08) 80%,
+    transparent 100%
+  );
+  filter: blur(0.5px);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* 미래지향적 인트로를 위한 추가 스타일 */
+.bg-gradient-radial {
+  background: radial-gradient(var(--tw-gradient-stops));
+}
+
+/* Glitch effect for text */
+.glitch-text {
+  position: relative;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  animation: glitch-1 0.5s infinite;
+  color: #ff0040;
+  z-index: -1;
+}
+
+.glitch-text::after {
+  animation: glitch-2 0.5s infinite;
+  color: #00ff40;
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+  0%,
+  14%,
+  15%,
+  49%,
+  50%,
+  99%,
+  100% {
+    transform: translate(0);
+  }
+  15%,
+  49% {
+    transform: translate(-2px, 1px);
+  }
+}
+
+@keyframes glitch-2 {
+  0%,
+  20%,
+  21%,
+  62%,
+  63%,
+  99%,
+  100% {
+    transform: translate(0);
+  }
+  21%,
+  62% {
+    transform: translate(2px, -1px);
+  }
+}
+
+/* Enhanced neon glow effects */
+.neon-glow {
+  text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor, 0 0 20px var(--primary), 0 0 35px
+    var(--primary), 0 0 40px var(--primary);
+}
+
+/* 글래스모피즘과 네온 효과를 위한 추가 스타일 */
+.glassmorphism {
+  background: rgba(16, 23, 40, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.glassmorphism-card {
+  background: linear-gradient(135deg, rgba(16, 23, 40, 0.8) 0%, rgba(18, 28, 49, 0.7) 50%, rgba(16, 23, 40, 0.8) 100%);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.glassmorphism-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(91, 124, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(155, 140, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.05) 75%,
+    rgba(91, 124, 255, 0.3) 100%
+  );
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+}
+
+/* 네온 글로우 효과 강화 */
+.neon-glow-primary {
+  box-shadow: 0 0 5px rgba(91, 124, 255, 0.4), 0 0 10px rgba(91, 124, 255, 0.3), 0 0 15px rgba(91, 124, 255, 0.2), 0 0
+    20px rgba(91, 124, 255, 0.1);
+}
+
+.neon-glow-accent {
+  box-shadow: 0 0 5px rgba(155, 140, 255, 0.4), 0 0 10px rgba(155, 140, 255, 0.3), 0 0 15px rgba(155, 140, 255, 0.2), 0
+    0 20px rgba(155, 140, 255, 0.1);
+}
+
+.neon-glow-success {
+  box-shadow: 0 0 5px rgba(34, 197, 94, 0.4), 0 0 10px rgba(34, 197, 94, 0.3), 0 0 15px rgba(34, 197, 94, 0.2), 0 0 20px
+    rgba(34, 197, 94, 0.1);
+}
+
+/* 버튼 호버 글리치 효과 */
+.glitch-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.glitch-hover::before,
+.glitch-hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glitch-hover:hover::before {
+  animation: glitch-1 0.3s ease-in-out;
+  opacity: 0.8;
+}
+
+.glitch-hover:hover::after {
+  animation: glitch-2 0.3s ease-in-out;
+  opacity: 0.8;
+}
+
+@keyframes glitch-1 {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+}
+
+@keyframes glitch-2 {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(2px, -2px);
+  }
+  40% {
+    transform: translate(2px, 2px);
+  }
+  60% {
+    transform: translate(-2px, -2px);
+  }
+  80% {
+    transform: translate(-2px, 2px);
+  }
+}
+
+/* 미래지향적 그라데이션 텍스트 */
+.gradient-text-neon {
+  background: linear-gradient(45deg, #5b7cff 0%, #9b8cff 25%, #22c55e 50%, #9b8cff 75%, #5b7cff 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* 파티클 효과를 위한 추가 스타일 */
+.particle-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle at 20% 80%, rgba(91, 124, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(155, 140, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(34, 197, 94, 0.05) 0%, transparent 50%);
+  animation: particle-float 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes particle-float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(10px, -10px) scale(1.05);
+  }
+  66% {
+    transform: translate(-5px, 5px) scale(0.95);
+  }
+}
