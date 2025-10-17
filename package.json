@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "build:export": "next build",
+    "build:export": "node scripts/build-export.mjs",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",

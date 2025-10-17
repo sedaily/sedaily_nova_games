@@ -1,27 +1,51 @@
 # CloudFront 배포 가이드
 
-## 🚀 배포 설정 완료!
+## 🚀 하이브리드 빌드 시스템
 
-이 프로젝트는 AWS CloudFront + S3 정적 배포에 최적화되어 있습니다.
+이 프로젝트는 **로컬 SSR 개발**과 **CloudFront 정적 배포**를 모두 지원합니다.
 
-### ✅ 완료된 설정들
+### 📦 빌드 옵션
 
-#### 1. Next.js 설정 (next.config.mjs)
-- `output: 'export'` - 정적 파일 생성
-- `trailingSlash: true` - S3 경로 호환
-- `distDir: 'out'` - 빌드 결과 폴더
-- `images.unoptimized: true` - CloudFront 이미지 처리
+#### 1. 로컬 개발용 (SSR)
+```bash
+npm run build    # .next 폴더 생성 (SSR 모드)
+npm start        # http://localhost:3000 (SSR 서버)
+```
+- **용도**: 로컬 개발 및 테스트
+- **결과**: `.next/` 폴더 (서버 사이드 렌더링)
+- **기능**: 이미지 최적화, 동적 라우팅, API 라우트 등 모든 Next.js 기능
 
-#### 2. 동적 라우팅 대응
+#### 2. 배포용 (정적 Export)
+```bash
+npm run build:export    # out 폴더 생성 (정적 파일)
+```
+- **용도**: CloudFront + S3 배포
+- **결과**: `out/` 폴더 (정적 HTML/CSS/JS)
+- **기능**: 정적 사이트, CDN 최적화, 캐시 친화적
+
+### ✅ 설정된 파일들
+
+#### 1. Next.js 설정
+- **`next.config.mjs`**: 기본 SSR 모드 (로컬 개발용)
+- **`next.config.export.mjs`**: 정적 export 모드 (배포용)
+- **`scripts/build-export.mjs`**: 자동 config 전환 스크립트
+
+#### 2. 빌드 시스템
+- 로컬: `npm run build` → `.next/` (SSR)
+- 배포: `npm run build:export` → `out/` (정적)
+- 자동 config 백업/복원 시스템
+
+#### 3. 동적 라우팅 대응
+#### 3. 동적 라우팅 대응
 - 모든 `[date]` 페이지에 `generateStaticParams()` 추가
 - 정적 파일로 pre-rendering 완료
 
-#### 3. SEO 최적화
+#### 4. SEO 최적화
 - `robots.txt` - 검색엔진 크롤링 가이드
 - `sitemap.xml` - 사이트맵 제공
 - 메타 태그 최적화 완료
 
-#### 4. 자동 배포 (GitHub Actions)
+#### 5. 자동 배포 (GitHub Actions)
 - `.github/workflows/deploy.yml` 설정 완료
 - S3 동기화 + CloudFront 무효화 자동화
 
