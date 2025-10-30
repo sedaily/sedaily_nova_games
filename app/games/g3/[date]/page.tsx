@@ -4,7 +4,7 @@ import { getAvailableDates } from "@/lib/games-data"
 
 // 정적 export를 위한 경로 생성
 export async function generateStaticParams() {
-  const dates = getAvailableDates("SignalDecoding")
+  const dates = await getAvailableDates("SignalDecoding")
   return dates.map((date) => ({
     date: date.replace(/-/g, ''), // 2024-09-17 → 20240917
   }))

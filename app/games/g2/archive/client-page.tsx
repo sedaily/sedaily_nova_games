@@ -8,51 +8,28 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowUp } from "lucide-react"
 import { todayKST, getMonthNameKR } from "@/lib/date-utils"
-import { getArchiveStructure, getQuestionsForDate, GAME_TYPE_MAP, type ArchiveStructure } from "@/lib/games-data"
+import { getArchiveStructure, type ArchiveStructure } from "@/lib/games-data"
 import { ArchiveCard } from "@/components/games/ArchiveCard"
 
-export default function G3ArchivePage() {
+export default function G2ArchiveClient() {
   const router = useRouter()
   const searchParams = useSearchParams()
   
-  // API에서 데이터 로드
   const [archiveData, setArchiveData] = useState<ArchiveStructure>({ years: [] })
   const [loading, setLoading] = useState(true)
-  const [dateTags, setDateTags] = useState<Record<string, string[]>>({})
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        const data = await getArchiveStructure(GAME_TYPE_MAP.g3)
-        setArchiveData(data)
-        
-        // 모든 날짜의 태그를 한 번에 로드
-        const tagsMap: Record<string, string[]> = {}
-        for (const yearData of data.years) {
-          for (const monthData of yearData.months) {
-            for (const dateStr of monthData.dates) {
-              const questions = await getQuestionsForDate("SignalDecoding", dateStr)
-              const uniqueTags = new Set<string>()
-              questions.forEach(q => {
-                if (q.tags) uniqueTags.add(q.tags)
-              })
-              tagsMap[dateStr] = Array.from(uniqueTags)
-            }
-          }
-        }
-        setDateTags(tagsMap)
-      } catch (error) {
-        console.error("[v0] Failed to load archive:", error)
-      } finally {
-        setLoading(false)
-      }
+    async function loadArchive() {
+      const data = await getArchiveStructure("PrisonersDilemma")
+      setArchiveData(data)
+      setLoading(false)
     }
-    loadData()
+    loadArchive()
   }, [])
 
   const hasData = archiveData.years.length > 0
-
   const availableYears = archiveData.years.map((y) => y.year)
+  
   const [selectedYear, setSelectedYear] = useState<number | null>(() => {
     const yearParam = searchParams.get("year")
     if (yearParam && yearParam !== "all") {
@@ -93,8 +70,16 @@ export default function G3ArchivePage() {
     } else {
       params.set("month", "all")
     }
-    router.replace(`/games/g3/archive?${params.toString()}`, { scroll: false })
+    router.replace(`/games/g2/archive?${params.toString()}`, { scroll: false })
   }, [selectedYear, selectedMonth, router])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">로딩 중...</p>
+      </div>
+    )
+  }
 
   const allDates: Array<{ date: string; year: number; month: number }> = []
   for (const yearData of archiveData.years) {
@@ -138,15 +123,6 @@ export default function G3ArchivePage() {
     ? archiveData.years.find((y) => y.year === selectedYear)?.months.map((m) => m.month) || []
     : Array.from(new Set(archiveData.years.flatMap((y) => y.months.map((m) => m.month)))).sort((a, b) => b - a)
 
-  // 로딩 중일 때
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">로딩 중...</p>
-      </div>
-    )
-  }
-
   if (!hasData) {
     return (
       <div className="min-h-screen bg-background">
@@ -165,22 +141,22 @@ export default function G3ArchivePage() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('/backgrounds/g3-signal-waves.png')",
+          backgroundImage: "url('/backgrounds/g2-silhouettes-clean.png')",
         }}
       />
-  <div className="absolute inset-0 bg-linear-to-b from-[#F0D9CC]/90 to-[#E9C3B0]/90" />
+  <div className="absolute inset-0 bg-linear-to-b from-[#EFEAE2]/90 to-[#E7DFD3]/90" />
 
       <div className="relative z-10">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <div className="mb-8 pb-6 border-b border-[#DB6B5E]/20">
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#184E77] mb-2">ARCHIVE</h1>
-            <p className="text-[#266D7E]">시그널 디코딩</p>
+          <div className="mb-8 pb-6 border-b border-[#8B5E3C]/20">
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#44403C] mb-2">ARCHIVE</h1>
+            <p className="text-[#78716C]">죄수의 딜레마</p>
           </div>
 
           <div className="mb-6 space-y-4">
             <div className="flex flex-wrap items-center gap-3">
               <Select value={selectedYear?.toString() || "all"} onValueChange={handleYearChange}>
-                <SelectTrigger className="w-[140px] bg-white/50 border-[#DB6B5E]/20 backdrop-blur-sm">
+                <SelectTrigger className="w-[140px] bg-white/50 border-[#8B5E3C]/20 backdrop-blur-sm">
                   <SelectValue placeholder="모든 연도" />
                 </SelectTrigger>
                 <SelectContent>
@@ -194,7 +170,7 @@ export default function G3ArchivePage() {
               </Select>
 
               <Select value={selectedMonth?.toString() || "all"} onValueChange={handleMonthChange}>
-                <SelectTrigger className="w-[140px] bg-white/50 border-[#DB6B5E]/20 backdrop-blur-sm">
+                <SelectTrigger className="w-[140px] bg-white/50 border-[#8B5E3C]/20 backdrop-blur-sm">
                   <SelectValue placeholder="모든 월" />
                 </SelectTrigger>
                 <SelectContent>
@@ -208,22 +184,22 @@ export default function G3ArchivePage() {
               </Select>
 
               {(selectedYear || selectedMonth) && (
-                <Button variant="ghost" size="sm" onClick={clearFilters} className="text-[#184E77] hover:bg-white/50">
+                <Button variant="ghost" size="sm" onClick={clearFilters} className="text-[#44403C] hover:bg-white/50">
                   필터 해제 ✕
                 </Button>
               )}
             </div>
 
             {(selectedYear || selectedMonth) && (
-              <div className="flex items-center gap-2 text-sm text-[#266D7E]">
+              <div className="flex items-center gap-2 text-sm text-[#78716C]">
                 <span>선택된 필터:</span>
                 {selectedYear && (
-                  <Badge variant="secondary" className="bg-[#DB6B5E]/80 text-white">
+                  <Badge variant="secondary" className="bg-[#8B5E3C]/80 text-white">
                     {selectedYear}년
                   </Badge>
                 )}
                 {selectedMonth && (
-                  <Badge variant="secondary" className="bg-[#DB6B5E]/80 text-white">
+                  <Badge variant="secondary" className="bg-[#8B5E3C]/80 text-white">
                     {getMonthNameKR(selectedMonth)}
                   </Badge>
                 )}
@@ -233,17 +209,15 @@ export default function G3ArchivePage() {
 
           <div className="space-y-5 md:space-y-6 mt-6 md:mt-8">
             {allDates.length === 0 ? (
-              <Card className="p-12 text-center bg-white/50 backdrop-blur-sm border-[#DB6B5E]/20">
-                <p className="text-lg text-[#266D7E] mb-4">선택한 필터에 해당하는 아카이브가 없습니다.</p>
-                <Button onClick={clearFilters} className="bg-[#DB6B5E] hover:bg-[#C85A4E]">
+              <Card className="p-12 text-center bg-white/50 backdrop-blur-sm border-[#8B5E3C]/20">
+                <p className="text-lg text-[#78716C] mb-4">선택한 필터에 해당하는 아카이브가 없습니다.</p>
+                <Button onClick={clearFilters} className="bg-[#8B5E3C] hover:bg-[#78523C]">
                   필터 해제
                 </Button>
               </Card>
             ) : (
               allDates.map(({ date }) => {
                 const isToday = date === today
-                // API에서 각 날짜는 항상 4문제씩 있음
-                const questionCount = 4
 
                 const [y, m, d] = date.split("-")
                 const shortDate = `${y.slice(2)}${m}${d}`
@@ -251,12 +225,11 @@ export default function G3ArchivePage() {
                 return (
                   <ArchiveCard
                     key={date}
-                    gameType="g3"
+                    gameType="g2"
                     date={date}
-                    questionCount={questionCount}
-                    tags={dateTags[date] || []}
+                    questionCount={4}
                     isToday={isToday}
-                    href={`/games/g3/${shortDate}`}
+                    href={`/games/g2/${shortDate}`}
                   />
                 )
               })
@@ -266,7 +239,7 @@ export default function G3ArchivePage() {
           {showScrollTop && (
             <button
               onClick={scrollToTop}
-              className="fixed bottom-8 right-8 p-3 bg-[#DB6B5E] hover:bg-[#C85A4E] text-white rounded-full shadow-lg transition-all z-50"
+              className="fixed bottom-8 right-8 p-3 bg-[#8B5E3C] hover:bg-[#78523C] text-white rounded-full shadow-lg transition-all z-50"
               aria-label="맨 위로 가기"
             >
               <ArrowUp className="w-6 h-6" />
@@ -274,7 +247,7 @@ export default function G3ArchivePage() {
           )}
 
           <div className="mt-12 text-center">
-            <Button size="lg" onClick={() => router.back()} className="bg-[#DB6B5E] hover:bg-[#C85A4E]">
+            <Button size="lg" onClick={() => router.back()} className="bg-[#8B5E3C] hover:bg-[#78523C]">
               오늘의 퀴즈 하러가기
             </Button>
           </div>

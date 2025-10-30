@@ -35,7 +35,7 @@ export default function G1ClientPage() {
         if (process.env.NODE_ENV === 'development') {
           console.log("[v0] Loading dummy quiz data for date:", formattedDate)
         }
-        const questions = getQuestionsForDate("BlackSwan", formattedDate)
+        const questions = await getQuestionsForDate("BlackSwan", formattedDate)
         
         // Question 타입을 QuizItem 타입으로 변환
         const quizItems: QuizItem[] = questions.map((q: Question, index) => ({

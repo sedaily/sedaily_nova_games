@@ -109,22 +109,48 @@ export const GAME_TYPE_MAP: Record<string, GameType> = {
 //   SignalDecoding: "g3",
 // }
 
-import quizData from "@/data/quizData_combined.json"
+import { fetchQuizData, type QuizDataStructure } from "./quiz-api-client"
 
-console.log("[v0] Quiz data loaded:", {
-  hasData: !!quizData,
-  gameTypes: Object.keys(quizData || {}),
-  blackSwanDates: Object.keys((quizData as any)?.BlackSwan || {}),
-  prisonersDilemmaDates: Object.keys((quizData as any)?.PrisonersDilemma || {}),
-  signalDecodingDates: Object.keys((quizData as any)?.SignalDecoding || {}),
-})
+// 캐시된 퀴즈 데이터
+let cachedTypedQuizData: QuizDataStructure | null = null
+
+/**
+ * 퀴즈 데이터 로드 (API 또는 캐시에서)
+ */
+async function loadQuizData(): Promise<QuizDataStructure> {
+  if (cachedTypedQuizData) {
+    return cachedTypedQuizData
+  }
+
+  try {
+    const data = await fetchQuizData()
+    cachedTypedQuizData = data
+    
+    console.log("[v0] Quiz data loaded:", {
+      hasData: !!data,
+      gameTypes: Object.keys(data || {}),
+      blackSwanDates: Object.keys(data?.BlackSwan || {}),
+      prisonersDilemmaDates: Object.keys(data?.PrisonersDilemma || {}),
+      signalDecodingDates: Object.keys(data?.SignalDecoding || {}),
+    })
+    
+    return data
+  } catch (error) {
+    console.error("[v0] Failed to load quiz data:", error)
+    return {
+      BlackSwan: {},
+      PrisonersDilemma: {},
+      SignalDecoding: {},
+    }
+  }
+}
 
 /**
  * Get questions for a specific game and date
  */
-export function getQuestionsForDate(gameType: GameType, date: string): Question[] {
+export async function getQuestionsForDate(gameType: GameType, date: string): Promise<Question[]> {
   try {
-    const data = quizData as unknown as GameDataStructure
+    const data = await loadQuizData()
     console.log(`[v0] Getting questions for ${gameType} on ${date}`)
 
     if (!data || !data[gameType]) {
@@ -144,9 +170,9 @@ export function getQuestionsForDate(gameType: GameType, date: string): Question[
 /**
  * Get all available dates for a specific game type
  */
-export function getAvailableDates(gameType: GameType): string[] {
+export async function getAvailableDates(gameType: GameType): Promise<string[]> {
   try {
-    const data = quizData as unknown as GameDataStructure
+    const data = await loadQuizData()
     console.log(`[v0] Getting available dates for ${gameType}`)
 
     if (!data || !data[gameType]) {
@@ -165,10 +191,9 @@ export function getAvailableDates(gameType: GameType): string[] {
 }
 
 /**
- * Get archive structure for a specific game type
- * Returns { year, months: [ { month, dates: [...] } ] }
+ * Archive structure type
  */
-export function getArchiveStructure(gameType: GameType): {
+export type ArchiveStructure = {
   years: Array<{
     year: number
     months: Array<{
@@ -176,8 +201,14 @@ export function getArchiveStructure(gameType: GameType): {
       dates: string[]
     }>
   }>
-} {
-  const dates = getAvailableDates(gameType)
+}
+
+/**
+ * Get archive structure grouped by year and month
+ * Returns { year, months: [ { month, dates: [...] } ] }
+ */
+export async function getArchiveStructure(gameType: GameType): Promise<ArchiveStructure> {
+  const dates = await getAvailableDates(gameType)
 
   // Group dates by year and month
   const yearMap = new Map<number, Map<number, string[]>>()
@@ -216,16 +247,16 @@ export function getArchiveStructure(gameType: GameType): {
 /**
  * Check if a date has questions available for a game type
  */
-export function hasQuestionsForDate(gameType: GameType, date: string): boolean {
-  const questions = getQuestionsForDate(gameType, date)
+export async function hasQuestionsForDate(gameType: GameType, date: string): Promise<boolean> {
+  const questions = await getQuestionsForDate(gameType, date)
   return questions.length > 0
 }
 
 /**
  * Get the most recent date with questions for a game type
  */
-export function getMostRecentDate(gameType: GameType): string | null {
-  const dates = getAvailableDates(gameType)
+export async function getMostRecentDate(gameType: GameType): Promise<string | null> {
+  const dates = await getAvailableDates(gameType)
   const mostRecent = dates.length > 0 ? dates[0] : null
   console.log(`[v0] Most recent date for ${gameType}:`, mostRecent)
   return mostRecent
@@ -239,8 +270,8 @@ export type TagType = (typeof AVAILABLE_TAGS)[number]
  * Get unique tags from questions for a specific date
  * Returns max 3 tags + count of remaining tags
  */
-export function getTagsForDate(gameType: GameType, date: string): { displayTags: string[]; remainingCount: number } {
-  const questions = getQuestionsForDate(gameType, date)
+export async function getTagsForDate(gameType: GameType, date: string): Promise<{ displayTags: string[]; remainingCount: number }> {
+  const questions = await getQuestionsForDate(gameType, date)
 
   // Collect unique tags
   const uniqueTags = new Set<string>()

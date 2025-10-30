@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -32,19 +32,7 @@ export default function AdminQuizPage() {
     }
   }, [])
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      loadQuestionsForDate(format(selectedDate, "yyyy-MM-dd"))
-    }
-  }, [selectedDate, isAuthenticated])
-
-  useEffect(() => {
-    if (questions.length === 0 && isAuthenticated) {
-      addNewQuestion()
-    }
-  }, [isAuthenticated])
-
-  const loadQuestionsForDate = async (date: string) => {
+  const loadQuestionsForDate = useCallback(async (date: string) => {
     try {
       const response = await fetch(`/api/admin/quiz?date=${date}`)
       if (response.ok) {
@@ -54,17 +42,23 @@ export default function AdminQuizPage() {
           setCurrentQuestionIndex(0)
         } else {
           setQuestions([])
-          addNewQuestion()
+          setCurrentQuestionIndex(0)
         }
       }
     } catch (err) {
       console.error("[v0] Failed to load questions:", err)
       setQuestions([])
-      addNewQuestion()
+      setCurrentQuestionIndex(0)
     }
-  }
+  }, [])
 
-  const addNewQuestion = () => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadQuestionsForDate(format(selectedDate, "yyyy-MM-dd"))
+    }
+  }, [selectedDate, isAuthenticated, loadQuestionsForDate])
+
+  const addNewQuestion = useCallback(() => {
     const newQuestion: QuizQuestion = {
       id: `q-${Date.now()}`,
       date: format(selectedDate, "yyyy-MM-dd"),
@@ -74,9 +68,15 @@ export default function AdminQuizPage() {
       correct_index: null,
       creator: "",
     }
-    setQuestions([...questions, newQuestion])
-    setCurrentQuestionIndex(questions.length)
-  }
+    setQuestions((prev) => [...prev, newQuestion])
+    setCurrentQuestionIndex((prev) => prev + 1)
+  }, [selectedDate])
+
+  useEffect(() => {
+    if (questions.length === 0 && isAuthenticated) {
+      addNewQuestion()
+    }
+  }, [isAuthenticated, addNewQuestion, questions.length])
 
   const deleteQuestion = (index: number) => {
     const newQuestions = questions.filter((_, i) => i !== index)
@@ -188,7 +188,8 @@ export default function AdminQuizPage() {
       }
     } catch (err) {
       setSaveStatus("error")
-      setValidationErrors([err.message || "저장 중 오류가 발생했습니다"])
+      const message = err instanceof Error ? err.message : String(err) || "저장 중 오류가 발생했습니다"
+      setValidationErrors([message])
     }
   }
 

@@ -24,6 +24,7 @@ export function NewsHeaderBlock({ logoSrc, siteUrl, headline, lede, themeStyles 
           width={480}
           height={120}
           className="h-24 w-auto"
+          loading="lazy"
         />
       </div>
 

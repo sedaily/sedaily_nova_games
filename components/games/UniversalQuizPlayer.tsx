@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, XCircle, Lightbulb, ExternalLink } from "lucide-react"
@@ -33,7 +33,6 @@ export function UniversalQuizPlayer({
   questions,
   date,
   gameType,
-  themeColor,
   disableSaveProgress = false,
 }: QuizPlayerProps) {
   const router = useRouter()
@@ -112,7 +111,7 @@ export function UniversalQuizPlayer({
 
   const themeStyles = getThemeStyles()
 
-  const saveProgress = (states: QuestionState[], currentScore: number, complete: boolean) => {
+  const saveProgress = useCallback((states: QuestionState[], currentScore: number, complete: boolean) => {
     if (disableSaveProgress) return
 
     const savedKey = `quiz-progress-${gameType}-${date}`
@@ -125,7 +124,7 @@ export function UniversalQuizPlayer({
         timestamp: Date.now(),
       }),
     )
-  }
+  }, [disableSaveProgress, gameType, date])
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -148,9 +147,10 @@ export function UniversalQuizPlayer({
 
     window.addEventListener("keydown", handleKeyPress)
     return () => window.removeEventListener("keydown", handleKeyPress)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionStates, answeredCount, questions])
 
-  const handleMultipleChoiceAnswer = (questionIndex: number, option: string) => {
+  const handleMultipleChoiceAnswer = useCallback((questionIndex: number, option: string) => {
     if (!questionStates[questionIndex]) return
 
     const currentState = questionStates[questionIndex]
@@ -161,20 +161,19 @@ export function UniversalQuizPlayer({
     const newStates = [...questionStates]
     newStates[questionIndex] = {
       ...currentState,
-      selectedAnswer: option,
+      userAnswer: option,
       isAnswered: true,
       isCorrect,
     }
-
-    const newScore = isCorrect ? score + 1 : score
     setQuestionStates(newStates)
-    setScore(newScore)
-    saveProgress(
-      newStates,
-      newScore,
-      newStates.every((state) => state.isAnswered),
-    )
-  }
+
+    const correctCount = newStates.filter((state) => state.isCorrect).length
+    setScore(correctCount)
+
+    if (!disableSaveProgress) {
+      saveProgress(newStates, correctCount, false)
+    }
+  }, [questionStates, questions, disableSaveProgress, saveProgress])
 
   const handleShortAnswerSubmit = (questionIndex: number) => {
     if (!questionStates[questionIndex]) return

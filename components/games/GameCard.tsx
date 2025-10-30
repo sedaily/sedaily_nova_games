@@ -32,7 +32,7 @@ export function GameCard({ game }: GameCardProps) {
           width={400}
           height={300}
           className="object-contain w-full h-full p-10 md:p-12"
-          priority
+          loading="lazy"
         />
       </div>
 

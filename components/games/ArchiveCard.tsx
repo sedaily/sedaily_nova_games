@@ -2,7 +2,6 @@ import { Badge } from "@/components/ui/badge"
 import { Tag } from "@/components/ui/tag"
 import Image from "next/image"
 import Link from "next/link"
-import { getTagsForDate, GAME_TYPE_MAP } from "@/lib/games-data"
 
 interface ArchiveCardProps {
   gameType: "g1" | "g2" | "g3"
@@ -10,6 +9,7 @@ interface ArchiveCardProps {
   questionCount: number
   isToday: boolean
   href: string
+  tags?: string[] // 태그 배열 추가
 }
 
 const GAME_CONFIG = {
@@ -57,7 +57,7 @@ const GAME_CONFIG = {
   },
 }
 
-export function ArchiveCard({ gameType, date, questionCount, isToday, href }: ArchiveCardProps) {
+export function ArchiveCard({ gameType, date, questionCount, isToday, href, tags = [] }: ArchiveCardProps) {
   const config = GAME_CONFIG[gameType]
 
   const dateObj = new Date(date + "T00:00:00")
@@ -72,8 +72,9 @@ export function ArchiveCard({ gameType, date, questionCount, isToday, href }: Ar
     timeZone: "Asia/Seoul",
   })
 
-  const gameTypeName = GAME_TYPE_MAP[gameType]
-  const { displayTags, remainingCount } = getTagsForDate(gameTypeName, date)
+  // props로 받은 태그 사용
+  const displayTags = tags.slice(0, 3)
+  const remainingCount = Math.max(0, tags.length - 3)
   const hasTags = displayTags.length > 0
 
   return (

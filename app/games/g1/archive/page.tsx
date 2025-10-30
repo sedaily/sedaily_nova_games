@@ -8,17 +8,50 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowUp } from "lucide-react"
 import { todayKST, getMonthNameKR } from "@/lib/date-utils"
-import { getArchiveStructure, getQuestionsForDate } from "@/lib/games-data"
+import { getArchiveStructure, getQuestionsForDate, type ArchiveStructure } from "@/lib/games-data"
 import { ArchiveCard } from "@/components/games/ArchiveCard"
-
-const archiveData = getArchiveStructure("BlackSwan")
-const hasData = archiveData.years.length > 0
 
 export default function G1ArchivePage() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  const [archiveData, setArchiveData] = useState<ArchiveStructure>({ years: [] })
+  const [loading, setLoading] = useState(true)
+  const [dateTags, setDateTags] = useState<Record<string, string[]>>({})
+
+  useEffect(() => {
+    async function loadArchive() {
+      try {
+        const data = await getArchiveStructure("BlackSwan")
+        setArchiveData(data)
+        
+        // 모든 날짜의 태그를 한 번에 로드
+        const tagsMap: Record<string, string[]> = {}
+        for (const yearData of data.years) {
+          for (const monthData of yearData.months) {
+            for (const dateStr of monthData.dates) {
+              const questions = await getQuestionsForDate("BlackSwan", dateStr)
+              const uniqueTags = new Set<string>()
+              questions.forEach(q => {
+                if (q.tags) uniqueTags.add(q.tags)
+              })
+              tagsMap[dateStr] = Array.from(uniqueTags)
+            }
+          }
+        }
+        setDateTags(tagsMap)
+      } catch (error) {
+        console.error("[v0] Failed to load archive:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadArchive()
+  }, [])
+
+  const hasData = archiveData.years.length > 0
   const availableYears = archiveData.years.map((y) => y.year)
+  
   const [selectedYear, setSelectedYear] = useState<number | null>(() => {
     const yearParam = searchParams.get("year")
     if (yearParam && yearParam !== "all") {
@@ -210,8 +243,8 @@ export default function G1ArchivePage() {
             ) : (
               allDates.map(({ date }) => {
                 const isToday = date === today
-                const questions = getQuestionsForDate("BlackSwan", date)
-                const questionCount = questions.length
+                // API에서 각 날짜는 항상 4문제씩 있음
+                const questionCount = 4
 
                 // Convert YYYY-MM-DD to YYMMDD for routing
                 const [y, m, d] = date.split("-")
@@ -225,6 +258,7 @@ export default function G1ArchivePage() {
                     questionCount={questionCount}
                     isToday={isToday}
                     href={`/games/g1/${shortDate}`}
+                    tags={dateTags[date] || []}
                   />
                 )
               })

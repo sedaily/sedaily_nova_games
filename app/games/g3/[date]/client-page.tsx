@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { UniversalQuizPlayer } from "@/components/games/UniversalQuizPlayer"
-import { getQuestionsForDate } from "@/lib/games-data"
+import { getQuestionsForDate, type Question } from "@/lib/games-data"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, Loader2 } from "lucide-react"
 
@@ -42,21 +42,29 @@ export default function DateQuizClient({ date }: Props) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [normalizedDate, setNormalizedDate] = useState<string | null>(null)
+  const [questions, setQuestions] = useState<Question[]>([])
 
   useEffect(() => {
-    try {
-      const normalized = normalizeDate(date)
-      if (!normalized) {
-        setError("잘못된 날짜 형식입니다.")
-        return
+    async function loadQuiz() {
+      try {
+        const normalized = normalizeDate(date)
+        if (!normalized) {
+          setError("잘못된 날짜 형식입니다.")
+          setLoading(false)
+          return
+        }
+        setNormalizedDate(normalized)
+        
+        const quizData = await getQuestionsForDate("SignalDecoding", normalized)
+        setQuestions(quizData)
+      } catch (err) {
+        console.error("[v0] Error loading date quiz:", err)
+        setError("퀴즈를 불러오는데 실패했습니다.")
+      } finally {
+        setLoading(false)
       }
-      setNormalizedDate(normalized)
-    } catch (err) {
-      console.error("[v0] Error loading date quiz:", err)
-      setError("퀴즈를 불러오는데 실패했습니다.")
-    } finally {
-      setLoading(false)
     }
+    loadQuiz()
   }, [date])
 
   if (loading) {
@@ -100,8 +108,6 @@ export default function DateQuizClient({ date }: Props) {
       </div>
     )
   }
-
-  const questions = getQuestionsForDate("SignalDecoding", normalizedDate)
 
   if (questions.length === 0) {
     return (

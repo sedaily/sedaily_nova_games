@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { UniversalQuizPlayer } from "@/components/games/UniversalQuizPlayer"
-import { getQuestionsForDate, getMostRecentDate } from "@/lib/games-data"
+import { getQuestionsForDate, getMostRecentDate, type Question } from "@/lib/games-data"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
@@ -12,21 +12,29 @@ export default function G2TestClientPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [date, setDate] = useState<string | null>(null)
+  const [questions, setQuestions] = useState<Question[]>([])
 
   useEffect(() => {
-    try {
-      const recentDate = getMostRecentDate("PrisonersDilemma")
-      if (!recentDate) {
-        setError("사용 가능한 퀴즈가 없습니다.")
-        return
+    async function loadQuiz() {
+      try {
+        const recentDate = await getMostRecentDate("PrisonersDilemma")
+        if (!recentDate) {
+          setError("사용 가능한 퀴즈가 없습니다.")
+          setLoading(false)
+          return
+        }
+        setDate(recentDate)
+        
+        const quizData = await getQuestionsForDate("PrisonersDilemma", recentDate)
+        setQuestions(quizData)
+      } catch (err) {
+        console.error("[v0] Error loading test quiz:", err)
+        setError("퀴즈를 불러오는데 실패했습니다.")
+      } finally {
+        setLoading(false)
       }
-      setDate(recentDate)
-    } catch (err) {
-      console.error("[v0] Error loading test quiz:", err)
-      setError("퀴즈를 불러오는데 실패했습니다.")
-    } finally {
-      setLoading(false)
     }
+    loadQuiz()
   }, [])
 
   if (loading) {
@@ -52,8 +60,6 @@ export default function G2TestClientPage() {
       </div>
     )
   }
-
-  const questions = getQuestionsForDate("PrisonersDilemma", date)
 
   if (questions.length === 0) {
     return (
