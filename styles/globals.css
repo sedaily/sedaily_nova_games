@@ -1,6 +1,40 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/* Load Pretendard & SpoqaHanSansNeo from CDN via @font-face.
+   next/font/local does not accept remote URLs; loading via CSS avoids
+   webpack trying to resolve a module like './https://...'. */
+
+@font-face {
+  font-family: 'PretendardVariable';
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/woff2/PretendardVariable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SpoqaHanSansNeo';
+  src: url('https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/Subset/SpoqaHanSansNeo/SpoqaHanSansNeo-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SpoqaHanSansNeo';
+  src: url('https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/Subset/SpoqaHanSansNeo/SpoqaHanSansNeo-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* CSS-level font-family vars used by layout html className */
+  --font-pretendard: 'PretendardVariable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-spoqa: 'SpoqaHanSansNeo', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

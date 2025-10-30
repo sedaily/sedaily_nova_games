@@ -69,6 +69,11 @@ export function getGameById(id: string): GameMeta | undefined {
 
 export type QuestionType = "객관식" | "주관식"
 
+export type RelatedArticle = {
+  title: string // Headline
+  excerpt: string // Article summary/lede
+}
+
 export type Question = {
   id: string
   questionType: QuestionType
@@ -78,6 +83,8 @@ export type Question = {
   answer: string
   explanation: string
   newsLink: string
+  tags?: string // Optional tag field for categorization
+  relatedArticle?: RelatedArticle // Added optional newspaper article header
 }
 
 export type GameType = "BlackSwan" | "PrisonersDilemma" | "SignalDecoding"
@@ -102,15 +109,32 @@ export const GAME_TYPE_MAP: Record<string, GameType> = {
 //   SignalDecoding: "g3",
 // }
 
-import answerData from "@/data/answer.json"
+import quizData from "@/data/quizData_combined.json"
+
+console.log("[v0] Quiz data loaded:", {
+  hasData: !!quizData,
+  gameTypes: Object.keys(quizData || {}),
+  blackSwanDates: Object.keys((quizData as any)?.BlackSwan || {}),
+  prisonersDilemmaDates: Object.keys((quizData as any)?.PrisonersDilemma || {}),
+  signalDecodingDates: Object.keys((quizData as any)?.SignalDecoding || {}),
+})
 
 /**
  * Get questions for a specific game and date
  */
 export function getQuestionsForDate(gameType: GameType, date: string): Question[] {
   try {
-    const data = answerData as unknown as GameDataStructure
-    return data[gameType]?.[date] || []
+    const data = quizData as unknown as GameDataStructure
+    console.log(`[v0] Getting questions for ${gameType} on ${date}`)
+
+    if (!data || !data[gameType]) {
+      console.error(`[v0] No data found for game type: ${gameType}`)
+      return []
+    }
+
+    const questions = data[gameType]?.[date] || []
+    console.log(`[v0] Found ${questions.length} questions for ${gameType} on ${date}`)
+    return questions
   } catch (error) {
     console.error(`[v0] Error loading questions for ${gameType} on ${date}:`, error)
     return []
@@ -122,8 +146,16 @@ export function getQuestionsForDate(gameType: GameType, date: string): Question[
  */
 export function getAvailableDates(gameType: GameType): string[] {
   try {
-    const data = answerData as unknown as GameDataStructure
+    const data = quizData as unknown as GameDataStructure
+    console.log(`[v0] Getting available dates for ${gameType}`)
+
+    if (!data || !data[gameType]) {
+      console.error(`[v0] No data found for game type: ${gameType}`)
+      return []
+    }
+
     const dates = Object.keys(data[gameType] || {})
+    console.log(`[v0] Found ${dates.length} dates for ${gameType}:`, dates)
     // Sort dates in descending order (newest first)
     return dates.sort((a, b) => b.localeCompare(a))
   } catch (error) {
@@ -194,5 +226,39 @@ export function hasQuestionsForDate(gameType: GameType, date: string): boolean {
  */
 export function getMostRecentDate(gameType: GameType): string | null {
   const dates = getAvailableDates(gameType)
-  return dates.length > 0 ? dates[0] : null
+  const mostRecent = dates.length > 0 ? dates[0] : null
+  console.log(`[v0] Most recent date for ${gameType}:`, mostRecent)
+  return mostRecent
+}
+
+export const AVAILABLE_TAGS = ["증권", "부동산", "경제·금융", "산업", "정치", "사회", "국제", "오피니언"] as const
+
+export type TagType = (typeof AVAILABLE_TAGS)[number]
+
+/**
+ * Get unique tags from questions for a specific date
+ * Returns max 3 tags + count of remaining tags
+ */
+export function getTagsForDate(gameType: GameType, date: string): { displayTags: string[]; remainingCount: number } {
+  const questions = getQuestionsForDate(gameType, date)
+
+  // Collect unique tags
+  const uniqueTags = new Set<string>()
+  questions.forEach((q) => {
+    if (q.tags) {
+      uniqueTags.add(q.tags)
+    }
+  })
+
+  const tagsArray = Array.from(uniqueTags)
+
+  // Return first 3 tags and count of remaining
+  if (tagsArray.length <= 3) {
+    return { displayTags: tagsArray, remainingCount: 0 }
+  } else {
+    return {
+      displayTags: tagsArray.slice(0, 3),
+      remainingCount: tagsArray.length - 3,
+    }
+  }
 }

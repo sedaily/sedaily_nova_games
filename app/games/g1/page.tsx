@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import G1ClientPage from "./page.client"
+import G1ClientPage from "./client-page"
 
 export const metadata: Metadata = {
   title: "오늘의 경제 퀴즈 | 서울경제 게임",

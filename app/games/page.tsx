@@ -14,31 +14,34 @@ export const metadata: Metadata = {
 export default function GamesPage() {
   return (
     <section className="container mx-auto px-4 md:px-6 lg:px-8 max-w-[1240px] py-10 md:py-14">
-      <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-16 mb-16 md:mb-20 lg:mb-24">
+      <div className="grid grid-cols-12 gap-6 md:gap-8 lg:gap-12 items-center mb-16 md:mb-20 lg:mb-24">
         {/* Left: Illustration */}
-        <div className="w-full md:w-auto flex justify-center md:justify-start shrink-0">
-          <div className="relative w-[400px] md:w-[480px] lg:w-[560px] aspect-square rounded-2xl overflow-hidden">
-            <Image
-              src="/games/hero-main.png"
-              alt="Seoul Economic News Games - Three interlocking gears representing Black Swan, Prisoner's Dilemma, and Signal Decoding"
-              fill
-              className="object-contain"
-              priority
-            />
+        <div className="col-span-12 md:col-span-6 flex justify-center md:justify-start">
+          <div className="relative w-full max-w-[400px] md:max-w-[480px] lg:max-w-[560px] aspect-square">
+            <span className="absolute inset-2 -z-10 rounded-lg bg-[rgba(250,248,240,0.36)] blur-[1px]" />
+            <div className="relative w-full h-full rounded-xl overflow-hidden p-2">
+              <Image
+                src="/games/hero-main.png"
+                alt="Seoul Economic News Games - Three interlocking gears representing Black Swan, Prisoner's Dilemma, and Signal Decoding"
+                fill
+                className="object-contain mx-auto opacity-95 brightness-95 contrast-95 drop-shadow-[0_2px_4px_rgba(0,0,0,0.04)]"
+                priority
+              />
+            </div>
           </div>
         </div>
 
         {/* Right: Text */}
-        <div className="flex-1 text-center flex flex-col justify-center">
+        <div className="col-span-12 md:col-span-6 md:pl-4 lg:pl-8 lg:max-w-[600px] mx-auto md:mx-0">
           <h1
-            className="text-2xl md:text-3xl lg:text-4xl font-title tracking-[-0.01em] leading-tight mb-4 md:mb-5 uppercase"
-            style={{ color: "#0D2239" }}
+            className="text-3xl lg:text-4xl leading-tight tracking-[-0.01em] font-title uppercase mb-4 md:mb-5 text-center md:text-left"
+            style={{ color: "#132333" }}
           >
             Seoul Economic News Games
           </h1>
           <p
-            className="text-base md:text-lg lg:text-xl font-sans tracking-[-0.01em] leading-relaxed"
-            style={{ color: "#0D2239" }}
+            className="mt-4 text-[15px] leading-relaxed font-sans text-center md:text-left opacity-90"
+            style={{ color: "#2A3A45" }}
           >
             <span className="font-bold">하루 5분</span>, 기사로 문해력과 판단력을 단련하고
             <br />

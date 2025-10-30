@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function G2Page() {
-  redirect("/games/g2/test")
+  redirect("/games/g2/play")
 }

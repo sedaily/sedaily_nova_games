@@ -70,7 +70,6 @@ export default function DateQuizClient({ date }: Props) {
             backgroundImage: "url('/backgrounds/g1-swan-water.png')",
           }}
         />
-        {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#102C55]/60 via-[#1E3A8A]/50 to-[#2B4B8A]/60" />
 
         <div className="flex items-center justify-center min-h-screen">
@@ -86,13 +85,12 @@ export default function DateQuizClient({ date }: Props) {
   if (error || !normalizedDate) {
     return (
       <div className="min-h-screen relative">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: "url('/backgrounds/g1-swan-water.png')",
-          }}
-        />
-        {/* Dark overlay for better text readability */}
+          <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/backgrounds/g1-swan-water.png')",
+        }}
+      />
         <div className="absolute inset-0 bg-gradient-to-b from-[#102C55]/60 via-[#1E3A8A]/50 to-[#2B4B8A]/60" />
 
         <div className="container mx-auto px-4 py-8">
@@ -116,7 +114,6 @@ export default function DateQuizClient({ date }: Props) {
             backgroundImage: "url('/backgrounds/g1-swan-water.png')",
           }}
         />
-        {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#102C55]/60 via-[#1E3A8A]/50 to-[#2B4B8A]/60" />
 
         <div className="container mx-auto px-4 py-8">
@@ -137,7 +134,6 @@ export default function DateQuizClient({ date }: Props) {
           backgroundImage: "url('/backgrounds/g1-swan-water.png')",
         }}
       />
-      {/* Dark overlay for better text readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#102C55]/60 via-[#1E3A8A]/50 to-[#2B4B8A]/60" />
 
       <div className="container mx-auto px-4 py-8 relative z-10">

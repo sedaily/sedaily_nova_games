@@ -5,7 +5,8 @@ import { SedailyHeader } from "@/components/navigation/SedailyHeader"
 import { Footer } from "@/components/navigation/Footer"
 import "./globals.css"
 import { Suspense } from "react"
-import { Fraunces, Noto_Serif_KR, Inter } from "next/font/google"
+import { Fraunces, Noto_Serif_KR, Inter, IBM_Plex_Mono } from "next/font/google"
+// removed localFont usage for remote CDN fonts (use @font-face in globals.css instead)
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -16,7 +17,7 @@ const fraunces = Fraunces({
 
 const notoSerifKR = Noto_Serif_KR({
   subsets: ["latin"],
-  weight: ["600", "700"],
+  weight: ["600", "700", "900"],
   variable: "--font-title-kr",
   display: "swap",
 })
@@ -27,6 +28,17 @@ const inter = Inter({
   variable: "--font-sans",
   display: "swap",
 })
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-mono",
+  display: "swap",
+})
+
+// Pretendard and SpoqaHanSansNeo are loaded via CSS @font-face in `styles/globals.css`.
+// next/font/local does not accept remote CDN URLs; attempting to use them causes
+// Webpack to try to resolve a module like './https://...' and fail the build.
 
 export const metadata: Metadata = {
   title: "서울경제 게임 | Seoul Economic Games",
@@ -54,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko" className={`${fraunces.variable} ${notoSerifKR.variable} ${inter.variable}`}>
+    <html lang="ko" className={`${fraunces.variable} ${notoSerifKR.variable} ${inter.variable} ${ibmPlexMono.variable}`}>
       <body className="site-bg font-sans antialiased min-h-screen flex flex-col">
         <Suspense fallback={<div>Loading...</div>}>
           <SedailyHeader />

@@ -5,7 +5,6 @@ import { UniversalQuizPlayer } from "@/components/games/UniversalQuizPlayer"
 import { getQuestionsForDate } from "@/lib/games-data"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, Loader2 } from "lucide-react"
-import Image from "next/image"
 
 type Props = {
   date: string
@@ -69,13 +68,12 @@ export default function DateQuizClient({ date }: Props) {
             backgroundImage: "url('/backgrounds/g2-silhouettes-clean.png')",
           }}
         />
-        {/* Light overlay to maintain beige theme */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#EFECE7]/40 via-[#E7DFD3]/35 to-[#E2DAD2]/40" />
 
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex items-center justify-center min-h-screen relative z-10">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="h-12 w-12 animate-spin text-[#8B5E3C]" aria-hidden="true" />
-            <p className="text-lg text-[#8B5E3C] korean-text">퀴즈를 불러오는 중...</p>
+            <p className="text-lg text-[#8B5E3C]">퀴즈를 불러오는 중...</p>
           </div>
         </div>
       </div>
@@ -91,10 +89,9 @@ export default function DateQuizClient({ date }: Props) {
             backgroundImage: "url('/backgrounds/g2-silhouettes-clean.png')",
           }}
         />
-        {/* Light overlay to maintain beige theme */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#EFECE7]/40 via-[#E7DFD3]/35 to-[#E2DAD2]/40" />
 
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 relative z-10">
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error || "퀴즈를 찾을 수 없습니다."}</AlertDescription>
@@ -115,10 +112,9 @@ export default function DateQuizClient({ date }: Props) {
             backgroundImage: "url('/backgrounds/g2-silhouettes-clean.png')",
           }}
         />
-        {/* Light overlay to maintain beige theme */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#EFECE7]/40 via-[#E7DFD3]/35 to-[#E2DAD2]/40" />
 
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 relative z-10">
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>이 날짜에 대한 퀴즈가 없습니다.</AlertDescription>
@@ -136,7 +132,6 @@ export default function DateQuizClient({ date }: Props) {
           backgroundImage: "url('/backgrounds/g2-silhouettes-clean.png')",
         }}
       />
-      {/* Light overlay to maintain beige theme */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#EFECE7]/40 via-[#E7DFD3]/35 to-[#E2DAD2]/40" />
 
       <div className="container mx-auto px-4 py-8 relative z-10">
@@ -149,28 +144,12 @@ export default function DateQuizClient({ date }: Props) {
           }}
         />
 
-        <div className="container mx-auto px-4 py-8 relative z-10">
-          {/* Header with icon */}
-          <div className="mb-8 text-center">
-            <div className="flex justify-center mb-4">
-              <div className="relative w-24 h-24 md:w-32 md:h-32">
-                <Image
-                  src="/icons/scale-woodcut.webp"
-                  alt="Balance Scale"
-                  fill
-                  className="object-contain drop-shadow-lg"
-                  priority
-                />
-              </div>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-[#44403C] font-serif">죄수의 딜레마</h1>
-            <p className="text-[#8B5E3C] text-base md:text-lg font-serif max-w-2xl mx-auto">
-              정책·경제 현안을 둘러싼 찬반 논리 분석
-            </p>
-          </div>
-
-          <UniversalQuizPlayer questions={questions} date={normalizedDate} gameType="PrisonersDilemma" themeColor="#8B5E3C" />
-        </div>
+        <UniversalQuizPlayer
+          questions={questions}
+          date={normalizedDate}
+          gameType="PrisonersDilemma"
+          themeColor="#8B5E3C"
+        />
       </div>
     </div>
   )

@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function G3Page() {
-  redirect("/games/g3/test")
+  redirect("/games/g3/play")
 }

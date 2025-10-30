@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge"
+import { Tag } from "@/components/ui/tag"
 import Image from "next/image"
 import Link from "next/link"
+import { getTagsForDate, GAME_TYPE_MAP } from "@/lib/games-data"
 
 interface ArchiveCardProps {
   gameType: "g1" | "g2" | "g3"
@@ -70,6 +72,10 @@ export function ArchiveCard({ gameType, date, questionCount, isToday, href }: Ar
     timeZone: "Asia/Seoul",
   })
 
+  const gameTypeName = GAME_TYPE_MAP[gameType]
+  const { displayTags, remainingCount } = getTagsForDate(gameTypeName, date)
+  const hasTags = displayTags.length > 0
+
   return (
     <Link
       href={href}
@@ -112,9 +118,24 @@ export function ArchiveCard({ gameType, date, questionCount, isToday, href }: Ar
             {dayOfWeek}, {formattedDate}
           </h3>
 
-          <p className={`text-[12px] md:text-[13px] ${config.textSecondary} font-sans tracking-wide`}>
+          <p className={`text-[12px] md:text-[13px] ${config.textSecondary} font-sans tracking-wide mb-2`}>
             BY SEOUL ECONOMIC DAILY
           </p>
+
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            {hasTags ? (
+              <>
+                {displayTags.map((tag, index) => (
+                  <Tag key={index} variant={gameType}>
+                    {tag}
+                  </Tag>
+                ))}
+                {remainingCount > 0 && <Tag variant={gameType}>+{remainingCount}</Tag>}
+              </>
+            ) : (
+              <Tag variant="other">기타</Tag>
+            )}
+          </div>
         </div>
       </div>
     </Link>
