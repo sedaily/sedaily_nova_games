@@ -1,9 +1,12 @@
 export type GameTheme = "BlackSwan" | "SignalDecoding" | "PrisonersDilemma"
 
+export type QuestionType = "객관식" | "주관식"
+
 export type QuizQuestion = {
   id: string
   date: string
   theme: GameTheme
+  questionType: QuestionType
   card_type?: "question" | "answer"
   title?: string
   question_text: string
