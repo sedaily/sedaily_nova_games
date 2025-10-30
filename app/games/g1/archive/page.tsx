@@ -121,12 +121,12 @@ export default function G1ArchivePage() {
     <div className="min-h-screen relative">
       {/* Background */}
       <div
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: "url('/backgrounds/g1-swan-water.png')",
         }}
       />
-      <div className="fixed inset-0 bg-gradient-to-b from-[#213B69]/85 via-[#1B3156]/85 to-[#182B49]/85 pointer-events-none" />
+  <div className="absolute inset-0 bg-linear-to-b from-[#213B69]/85 via-[#1B3156]/85 to-[#182B49]/85" />
 
       {/* Content */}
       <div className="relative z-10">

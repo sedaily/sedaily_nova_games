@@ -120,12 +120,12 @@ export default function G3ArchivePage() {
   return (
     <div className="min-h-screen relative">
       <div
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: "url('/backgrounds/g3-signal-waves.png')",
         }}
       />
-      <div className="fixed inset-0 bg-gradient-to-b from-[#F0D9CC]/90 to-[#E9C3B0]/90 pointer-events-none" />
+  <div className="absolute inset-0 bg-linear-to-b from-[#F0D9CC]/90 to-[#E9C3B0]/90" />
 
       <div className="relative z-10">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
